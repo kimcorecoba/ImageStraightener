@@ -1,9 +1,17 @@
-import customtkinter as ctk
-from gui import ImageStraightenerGUI
+import sys
 
-ctk.set_appearance_mode("Dark")
-ctk.set_default_color_theme("blue")
+from PySide6.QtWidgets import QApplication
+from gui.main_window import MainWindow
+
+
+def main():
+    app = QApplication(sys.argv)
+
+    window = MainWindow()
+    window.show()
+
+    sys.exit(app.exec())
+
 
 if __name__ == "__main__":
-    app = ImageStraightenerGUI()
-    app.mainloop()
+    main()
