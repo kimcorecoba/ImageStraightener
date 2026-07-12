@@ -1,0 +1,6 @@
+opencv-python
+opencv-contrib-python
+numpy
+Pillow
+customtkinter
+tkinterdnd2
