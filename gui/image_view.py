@@ -1,4 +1,5 @@
 from PySide6.QtCore import Qt
+from gui.overlay import RectangleOverlay
 from PySide6.QtGui import QPixmap
 from PySide6.QtWidgets import (
     QGraphicsPixmapItem,
@@ -17,6 +18,9 @@ class ImageView(QGraphicsView):
 
         self.pixmap_item = QGraphicsPixmapItem()
         self.scene.addItem(self.pixmap_item)
+
+	    self.overlay = RectangleOverlay()
+	    self.scene.addItem(self.overlay)
 
         self.setRenderHints(
             self.renderHints()
@@ -54,3 +58,11 @@ class ImageView(QGraphicsView):
             self.scale(zoom, zoom)
         else:
             self.scale(1 / zoom, 1 / zoom)
+
+    def draw_test_rectangle(self):
+        self.overlay.set_rectangle(
+            100,
+            100,
+            300,
+            250
+        )      
