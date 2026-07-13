@@ -1,5 +1,4 @@
 from PySide6.QtCore import Qt
-from gui.overlay import RectangleOverlay
 from PySide6.QtGui import QPixmap
 from PySide6.QtWidgets import (
     QGraphicsPixmapItem,
@@ -9,60 +8,47 @@ from PySide6.QtWidgets import (
 
 
 class ImageView(QGraphicsView):
-
     def __init__(self):
         super().__init__()
 
+        # Create the scene
         self.scene = QGraphicsScene(self)
         self.setScene(self.scene)
 
+        # Image item
         self.pixmap_item = QGraphicsPixmapItem()
         self.scene.addItem(self.pixmap_item)
 
-	    self.overlay = RectangleOverlay()
-	    self.scene.addItem(self.overlay)
-
-        self.setRenderHints(
-            self.renderHints()
-        )
-
+        # Viewer settings
         self.setDragMode(QGraphicsView.ScrollHandDrag)
-
-        self.setTransformationAnchor(
-            QGraphicsView.AnchorUnderMouse
-        )
+        self.setTransformationAnchor(QGraphicsView.AnchorUnderMouse)
+        self.setResizeAnchor(QGraphicsView.AnchorViewCenter)
 
     def load_image(self, filename):
+        """Load an image into the viewer."""
 
         pixmap = QPixmap(filename)
 
         if pixmap.isNull():
-            return
+            return False
 
         self.pixmap_item.setPixmap(pixmap)
 
-        self.scene.setSceneRect(
-            self.pixmap_item.boundingRect()
-        )
+        self.scene.setSceneRect(self.pixmap_item.boundingRect())
 
         self.fitInView(
             self.scene.sceneRect(),
             Qt.KeepAspectRatio
         )
 
-    def wheelEvent(self, event):
+        return True
 
-        zoom = 1.25
+    def wheelEvent(self, event):
+        """Zoom with the mouse wheel."""
+
+        zoom_factor = 1.15
 
         if event.angleDelta().y() > 0:
-            self.scale(zoom, zoom)
+            self.scale(zoom_factor, zoom_factor)
         else:
-            self.scale(1 / zoom, 1 / zoom)
-
-    def draw_test_rectangle(self):
-        self.overlay.set_rectangle(
-            100,
-            100,
-            300,
-            250
-        )      
+            self.scale(1 / zoom_factor, 1 / zoom_factor)
